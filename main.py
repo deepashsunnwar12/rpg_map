@@ -1,7 +1,7 @@
 #-----------------------------------------------------------
 # Created by: Deepash Sunwar
 # Created date: 09/16/23
-# version = "1.0"
+# version = "2.0"
 #-----------------------------------------------------------
 
 # The map databse includes all information about a specific room
@@ -69,7 +69,7 @@ while True:
     print("(Quit) Quit")
 
   # if the current location is not the bedroom then the only option for user is to go back to bedroom or quit
-    
+
   else:
     print("Only possible movements: ")
     print("  ")
@@ -103,7 +103,7 @@ while True:
       print("  ")
       print(map[i][1]['description'])
       current_location = map[i][0]
-      valid_movement = True # movement becomes true here because the user input was valid
+      valid_movement = True  # movement becomes true here because the user input was valid
       break
 
   # if the input was not valid it restarts the loop
