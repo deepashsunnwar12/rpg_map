@@ -1,9 +1,15 @@
 #-----------------------------------------------------------
-# Created by: Deepash Sunwar
-# Created date: 09/16/23
-# version = "2.0"
+# Title: Rpg  map
+# Class: CS 30
+# Date: March 20, 2023
+# Coders Name: Deepash Sunwar
+# Version: 2
 #-----------------------------------------------------------
+'''
+Current Assignment: rpg map
 
+This program has database of rooms the user can go to, it allows user to quit anytime, it is continous play.
+'''
 # The map databse includes all information about a specific room
 map = [
   [
@@ -43,7 +49,20 @@ map = [
 
 # creates a line break by calling this function (easier to see information)
 def line_break():
+  """
+  creates a sort of 'line' break, only for user to see easily
+  """
   print("\n-------------------------------\n")
+
+
+def movement():
+  """
+  All this function does is ask the user their choice and returns
+  the result, this is later used for the continous play later on
+  """
+  user_choice = input("Which location do you want to explore: ").lower()
+
+  return user_choice
 
 
 # global var for starting room
@@ -78,9 +97,8 @@ while True:
 
   line_break()
 
-  # asks the user what location they want to explore
-  user_location_choice = input(
-    "Which location do you want to explore: ").lower()
+  # asks the user what location they want to explore through movement function
+  user_location_choice = movement()
 
   line_break()
   # checks if user wants to quit

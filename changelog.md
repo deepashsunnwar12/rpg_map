@@ -6,7 +6,9 @@ added - quit option
 
 
 v2.0
-Name: RPG: _______________
+Name: RPG map only
 update - games name
 added - change log
 added - a dictionary to hold map-tile information (add description strings)
+added - movement function
+added - continous play
