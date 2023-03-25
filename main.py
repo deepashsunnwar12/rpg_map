@@ -1,16 +1,15 @@
 #-----------------------------------------------------------
-# Title: Rpg  map
+# Title: Rpg map and inventory
 # Class: CS 30
-# Date: March 20, 2023
+# Date: March 25, 2023
 # Coders Name: Deepash Sunwar
-# Version: 2
+# Version: 3
 #-----------------------------------------------------------
 '''
-Current Assignment: rpg map
+Current Assignment: rpg map and inventory
 
 This program has database of rooms the user can go to, it allows user to quit anytime, it is continous play.
 '''
-# The map databse includes all information about a specific room
 map = [
   [
     "The kitchen", {
@@ -46,85 +45,197 @@ map = [
   ],
 ]
 
+# all objects that can be found whitin the game
+objects = {
+  "knife": {
+    "room_name":
+    "The kitchen",
+    "object_description":
+    "A sharp, versatile kitchen knife that can be used for cutting"
+  },
+  "book": {
+    "room_name": "The study room",
+    "object_description": "A old dusty book"
+  },
+  "photo": {
+    "room_name": "The attic",
+    "object_description": "An old photo of you and your family"
+  },
+  "bicycle": {
+    "room_name": "The backyard",
+    "object_description": "shiny blue colored bicycle"
+  },
+}
 
+# all the action the user can do after walking into a room
+after_movement = ["back", "search", "quit"]
+
+# from the map it takes all the directions and stores it in this list
+room_direction = [direc[1]['action_key'] for direc in map]
+
+# this var lets me check which actions are valid and not depending on where the user is at
+in_room = False
+
+# empty inventory
+inventory = []
+
+# this var allows me to check which rooms they've already collected items from
+searched_rooms = {}
+
+# the starting room
+current_location = "The bedroom"
 # creates a line break by calling this function (easier to see information)
+
+
 def line_break():
   """
-  creates a sort of 'line' break, only for user to see easily
+    creates a sort of 'line' break, only for user to see easily
+    """
+  print("\n===================================\n")
+
+
+def display_movement():
   """
-  print("\n-------------------------------\n")
+    Displays the movements(and room) the user could take(north, west, south, east)
+    """
+  for i in range(len(map)):
+    print(f"({map[i][1]['action_key'].capitalize()}) {map[i][0]}")
+  print("(Inventory)")
+  print("(Quit)")
 
 
-def movement():
+def movement_actions():
   """
-  All this function does is ask the user their choice and returns
-  the result, this is later used for the continous play later on
+    takes in user input for what action they would want to do
+    """
+  return input("What action would you like to do: ").lower()
+
+
+def location_description(location):
   """
-  user_choice = input("Which location do you want to explore: ").lower()
+    it prints the user's location description
+    """
+  print("LOCATION DESCRIPTION:")
+  for i in range(len(map)):
+    if map[i][0] == location:
+      print(map[i][1]['description'])
 
-  return user_choice
+
+def take_object(item):
+  """
+    It puts items user finds in the inventory
+    """
+  inventory.append(item)
 
 
-# global var for starting room
-current_location = "The bedroom"
+def print_inventory():
+  """
+    It prints out the user's inventory
+    """
+  print("Your current inventory: ")
+  for i in range(len(inventory)):
+    print(inventory[i])
 
-# the bedroom description
-print(
-  "You are in a small bedroom, containing a simple bed, a dresser, and a window. The air is still and quiet, and the room feels cozy and safe."
-)
 
-line_break()
+def object_description(item):
+  """
+    it prints out the object's description
+    """
+  print(objects[item]['object_description'])
 
-# the game loop
+
+def possible_movements():
+  """
+    It prints out all the possible movements the user can make after they have entered a room
+    """
+  global after_movement
+  print("Only possible movements: ")
+  for i in range(len(after_movement)):
+    print(f"({after_movement[i].capitalize()})")
+
+
+def search(location):
+  """
+    It searches the room they are in for an object, then it takes the     object out of the dictonary and returns the name of it
+    """
+  global searched_rooms
+  if location in searched_rooms:
+    print("You've already grabbed the object from this room!")
+    return None
+  for key in objects:
+    if location == objects[key]['room_name']:
+      print("OBJECT FOUND!")
+      print(
+        f"You have found a {key} and it has been stored into your inventory!")
+      line_break()
+      print("OBJECT DESCRIPTION: ")
+      object_description(key)
+      line_break()
+      objects.pop(key)
+      searched_rooms[location] = True
+      return key
+  return None
+
+
 while True:
-  # This prints out the current location the user is at
+
+  # Keeps track of where user is
   print(f"current location: {current_location}")
   line_break()
 
-  # print all the available locations and a quit option if current location is not the start room
+  # if the user is at starting room
   if current_location == "The bedroom":
-    for i in range(len(map)):
-      print(f"({map[i][1]['action_key'].capitalize()}) {map[i][0]}")
-    print("(Quit) Quit")
+    display_movement()
+    line_break()
 
-  # if the current location is not the bedroom then the only option for user is to go back to bedroom or quit
-
+  # if the user is not at starting room
   else:
-    print("Only possible movements: ")
-    print("  ")
-    print("(back) The bedroom")
-    print("(Quit) Quit")
+    possible_movements()
+    line_break()
 
+  # asks for user input
+  user_action_choice = movement_actions()
   line_break()
 
-  # asks the user what location they want to explore through movement function
-  user_location_choice = movement()
+  # checks if the user input is within the possible directions
+  if user_action_choice in room_direction:
 
-  line_break()
-  # checks if user wants to quit
-  if user_location_choice == "quit":
+    # checks if they are in a room that is not the starting room
+    if in_room and current_location != "The bedroom":
+      print("Please enter a valid movement!")
+      line_break()
+
+      continue
+    # if they aren't then it prints out the possible directions they can go to
+    for i in range(len(map)):
+      if user_action_choice == map[i][1]['action_key']:
+        current_location = map[i][0]
+        location_description(current_location)
+        in_room = True
+        break
+
+  # checks if the user wants to quit
+  if user_action_choice == "quit":
     print("Thank you for playing!")
     break
+  # checks if user wants to search
+  elif user_action_choice == "search" and current_location != "The bedroom":
+    object = search(current_location)
+    take_object(object)
 
-  # also checks if the user wants to go back to the start room
-  elif user_location_choice == "back":
+  # checks if user wants to access inventory
+  elif user_action_choice == "inventory":
+    print_inventory()
+    line_break()
+    continue
+
+  # checks if the user wants to go to main menu
+  elif user_action_choice == "back":
     current_location = "The bedroom"
     continue
 
-  # this checks if the movement is valid( at first is false)
-  valid_movement = False
-
-  # checks what the user wanted to explore and prints out description
-  for i in range(len(map)):
-    if user_location_choice == map[i][1]['action_key']:
-      print("LOCATION DESCRIPTION:")
-      print("  ")
-      print(map[i][1]['description'])
-      current_location = map[i][0]
-      valid_movement = True  # movement becomes true here because the user input was valid
-      break
-
-  # if the input was not valid it restarts the loop
-  if not valid_movement:
-    print("You did not enter a valid movement")
+  # if the user input does not equal to any of the possible actions then it gives them a invalid message
+  else:
+    print("Please enter a valid action!")
+    line_break()
     continue
