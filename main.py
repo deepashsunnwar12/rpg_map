@@ -161,7 +161,7 @@ def search(location):
   global searched_rooms
   if location in searched_rooms:
     print("You've already grabbed the object from this room!")
-    return None
+    line_break()
   for key in objects:
     if location == objects[key]['room_name']:
       print("OBJECT FOUND!")
@@ -221,7 +221,8 @@ while True:
   # checks if user wants to search
   elif user_action_choice == "search" and current_location != "The bedroom":
     object = search(current_location)
-    take_object(object)
+    if object != None:
+      take_object(object)
 
   # checks if user wants to access inventory
   elif user_action_choice == "inventory":
