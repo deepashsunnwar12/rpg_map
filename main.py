@@ -6,72 +6,18 @@
 # Version: 3
 #-----------------------------------------------------------
 '''
-Current Assignment: rpg map and inventory
+Current Assignment: rpg database.map and inventory
 
 This program has database of rooms the user can go to, it allows user to quit anytime, it is continous play.
 '''
-map = [
-  [
-    "The kitchen", {
-      "action_key":
-      "west",
-      "description":
-      "You step into a small kitchen, containing a stove, a sink, and a few cabinets. The air is filled with the smell of baking bread or cooking soup, and you can see a small table and a few chairs in the corner",
-    }
-  ],
-  [
-    "The study room", {
-      "action_key":
-      "east",
-      "description":
-      "You step into a small study room, containing a desk, a bookshelf, and a comfortable armchair. The air is filled with the scent of old books, and you can see a few scrolls and quills scattered on the desk.",
-    }
-  ],
-  [
-    "The attic", {
-      "action_key":
-      "south",
-      "description":
-      "You step into a dusty attic, containing a few old trunks and boxes. The air is musty and stale, and you can see some old furniture and decorations from long ago.",
-    }
-  ],
-  [
-    "The backyard", {
-      "action_key":
-      "north",
-      "description":
-      "You step outside into a small backyard, containing a few trees or bushes, a patch of grass, and perhaps a small garden plot. The air is fresh and clean, and you can hear the sound of birds chirping or leaves rustling in the wind.",
-    }
-  ],
-]
 
-# all objects that can be found whitin the game
-objects = {
-  "knife": {
-    "room_name":
-    "The kitchen",
-    "object_description":
-    "A sharp, versatile kitchen knife that can be used for cutting"
-  },
-  "book": {
-    "room_name": "The study room",
-    "object_description": "A old dusty book"
-  },
-  "photo": {
-    "room_name": "The attic",
-    "object_description": "An old photo of you and your family"
-  },
-  "bicycle": {
-    "room_name": "The backyard",
-    "object_description": "shiny blue colored bicycle"
-  },
-}
+import database
 
 # all the action the user can do after walking into a room
 after_movement = ["back", "search", "quit"]
 
 # from the map it takes all the directions and stores it in this list
-room_direction = [direc[1]['action_key'] for direc in map]
+room_direction = [direc[1]['action_key'] for direc in database.map]
 
 # this var lets me check which actions are valid and not depending on where the user is at
 in_room = False
@@ -84,8 +30,6 @@ searched_rooms = {}
 
 # the starting room
 current_location = "The bedroom"
-# creates a line break by calling this function (easier to see information)
-
 
 def line_break():
   """
@@ -98,8 +42,10 @@ def display_movement():
   """
     Displays the movements(and room) the user could take(north, west, south, east)
     """
-  for i in range(len(map)):
-    print(f"({map[i][1]['action_key'].capitalize()}) {map[i][0]}")
+  for i in range(len(database.map)):
+    print(
+      f"({database.map[i][1]['action_key'].capitalize()}) {database.map[i][0]}"
+    )
   print("(Inventory)")
   print("(Quit)")
 
@@ -116,9 +62,9 @@ def location_description(location):
     it prints the user's location description
     """
   print("LOCATION DESCRIPTION:")
-  for i in range(len(map)):
-    if map[i][0] == location:
-      print(map[i][1]['description'])
+  for i in range(len(database.map)):
+    if database.map[i][0] == location:
+      print(database.map[i][1]['description'])
 
 
 def take_object(item):
@@ -141,7 +87,7 @@ def object_description(item):
   """
     it prints out the object's description
     """
-  print(objects[item]['object_description'])
+  print(database.objects[item]['object_description'])
 
 
 def possible_movements():
@@ -162,8 +108,8 @@ def search(location):
   if location in searched_rooms:
     print("You've already grabbed the object from this room!")
     line_break()
-  for key in objects:
-    if location == objects[key]['room_name']:
+  for key in database.objects:
+    if location == database.objects[key]['room_name']:
       print("OBJECT FOUND!")
       print(
         f"You have found a {key} and it has been stored into your inventory!")
@@ -171,7 +117,7 @@ def search(location):
       print("OBJECT DESCRIPTION: ")
       object_description(key)
       line_break()
-      objects.pop(key)
+      database.objects.pop(key)
       searched_rooms[location] = True
       return key
   return None
@@ -207,9 +153,9 @@ while True:
 
       continue
     # if they aren't then it prints out the possible directions they can go to
-    for i in range(len(map)):
-      if user_action_choice == map[i][1]['action_key']:
-        current_location = map[i][0]
+    for i in range(len(database.map)):
+      if user_action_choice == database.map[i][1]['action_key']:
+        current_location = database.map[i][0]
         location_description(current_location)
         in_room = True
         break
