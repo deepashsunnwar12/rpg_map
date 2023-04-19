@@ -31,6 +31,7 @@ searched_rooms = {}
 # the starting room
 current_location = "The bedroom"
 
+
 def line_break():
   """
     creates a sort of 'line' break, only for user to see easily
