@@ -1,0 +1,4 @@
+The kitchen is in the west
+The study room is in the east
+The attic is in the south
+The backyard is in the north

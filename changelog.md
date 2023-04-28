@@ -19,4 +19,5 @@ added - empty inventory
 added - second dictonary to store objects in
 added - able to keep items in inventory
 updated - functions created for certain tasks
-added- external files
+added - external files
+added - try and except block

@@ -6,7 +6,7 @@
 # Version: 3
 #-----------------------------------------------------------
 '''
-Current Assignment: rpg database.map and inventory
+Current Assignment: rpg map and inventory
 
 This program has database of rooms the user can go to, it allows user to quit anytime, it is continous play.
 '''
@@ -47,6 +47,7 @@ def display_movement():
     print(
       f"({database.map[i][1]['action_key'].capitalize()}) {database.map[i][0]}"
     )
+  print("(map) Print map")
   print("(Inventory)")
   print("(Quit)")
 
@@ -124,6 +125,20 @@ def search(location):
   return None
 
 
+def print_map():
+  data = ""
+  for i in range(len(database.map)):
+    data = data + database.map[i][0] + " is in the " + \
+        database.map[i][1]['action_key'] + "\n"
+  try:
+    with open('map.txt', 'r') as f:
+      print(f.read())
+  except FileNotFoundError:
+    with open('map.txt', 'w') as f:
+      f.write(data)
+      print(data)
+
+
 while True:
 
   # Keeps track of where user is
@@ -177,6 +192,11 @@ while True:
     line_break()
     continue
 
+  elif user_action_choice == "map":
+    print_map()
+    line_break()
+    continue
+
   # checks if the user wants to go to main menu
   elif user_action_choice == "back":
     current_location = "The bedroom"
@@ -187,3 +207,6 @@ while True:
     print("Please enter a valid action!")
     line_break()
     continue
+
+print(database.map[0][0])
+print(database.map[0][1]['action_key'])
